@@ -1,5 +1,6 @@
 package com.taxation.services;
 
+import com.taxation.dto.EmployeeDTO;
 import com.taxation.entities.Employee;
 import com.taxation.repository.EmployeeRepository;
 import jakarta.annotation.PostConstruct;
@@ -27,6 +28,41 @@ public class EmployeeService {
 
         // Save dummy employees to the database
         employeeRepository.saveAll(employees);
+    }
+
+
+    public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
+        // Convert DTO to entity
+        Employee employee = convertToEntity(employeeDTO);
+
+        // Save employee entity
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        // Convert entity to DTO and return
+        return convertToDTO(savedEmployee);
+    }
+
+    private Employee convertToEntity(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        employee.setFirstName(employeeDTO.getFirstName());
+        employee.setLastName(employeeDTO.getLastName());
+        employee.setEmail(employeeDTO.getEmail());
+        employee.setPhoneNumber(employeeDTO.getPhoneNumbers());
+        employee.setDateOfJoining(employeeDTO.getDateOfJoining());
+        employee.setSalary(employeeDTO.getSalary());
+        return employee;
+    }
+
+    private EmployeeDTO convertToDTO(Employee employee) {
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.setEmployeeId(employee.getEmployeeId());
+        employeeDTO.setFirstName(employee.getFirstName());
+        employeeDTO.setLastName(employee.getLastName());
+        employeeDTO.setEmail(employee.getEmail());
+        employeeDTO.setPhoneNumbers(employee.getPhoneNumber());
+        employeeDTO.setDateOfJoining(employee.getDateOfJoining());
+        employeeDTO.setSalary(employee.getSalary());
+        return employeeDTO;
     }
 
     private Date getDate(int year, int month, int day) {
